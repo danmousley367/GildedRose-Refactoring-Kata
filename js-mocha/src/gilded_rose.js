@@ -9,17 +9,28 @@ class Item {
 class Shop {
   constructor(items=[]){
     this.items = items;
+    this.nonDegradingItems = ["Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros"]
+    this.conjuredItems = ["Fake Apple"]
+    this.legendaryItems = ["Sulfuras, Hand of Ragnaros"]
   }
+
+  decreaseDaysToSell(item) {
+    item.sellIn -= 1
+  }
+
+  changeQuality(item, amount) {
+    item.quality = item.quality + amount < 0 ? 0 : item.quality + amount
+  }
+
   updateQuality() {
     // quality decreases unless brie, backstage pass or sulfuras
-    for (var i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
-      } else {  // Quality increases by 1
+    for (let i = 0; i < this.items.length; i++) {
+      if (!this.nonDegradingItems.includes(this.items[i].name)) {
+        let decrease = this.items[i].sellIn < 0 ? -2 : -1
+        if (this.conjuredItems.includes(this.items[i].name)) {decrease *= 2}
+        this.changeQuality(this.items[i], decrease)
+      }
+      if (this.nonDegradingItems.includes(this.items[i].name) && !this.legendaryItems.includes(this.items[i].name)) {  // Quality increases by 1
         if (this.items[i].quality < 50) {
           this.items[i].quality = this.items[i].quality + 1;
           if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') { //backstage pass
