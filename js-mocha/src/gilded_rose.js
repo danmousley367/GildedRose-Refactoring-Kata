@@ -19,7 +19,11 @@ class Shop {
   }
 
   changeQuality(item, amount) {
-    item.quality = item.quality + amount < 0 ? 0 : item.quality + amount
+    if (amount < 0) {
+      item.quality = item.quality + amount < 0 ? 0 : item.quality + amount
+    } else {
+      item.quality = item.quality + amount > 50 ? 50 : item.quality + amount
+    }
   }
 
   updateQuality() {
