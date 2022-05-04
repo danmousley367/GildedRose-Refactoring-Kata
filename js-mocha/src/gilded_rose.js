@@ -47,9 +47,9 @@ class Shop {
         this.changeQuality(item, decrease)
       }
 
-      if (this.nonDegradingItems.includes(item.name) && !this.legendaryItems.includes(item.name)) {  // Quality increases by 1
+      if (this.nonDegradingItems.includes(item.name) && !this.legendaryItems.includes(item.name)) {
           if (item.name == 'Backstage passes to a TAFKAL80ETC concert') {
-            this.handleBackstagePass(item)//backstage pass
+            this.handleBackstagePass(item)
           } else if (item.name === "Aged Brie" && item.sellIn < 0) {
             this.changeQuality(item, 2)
           }
