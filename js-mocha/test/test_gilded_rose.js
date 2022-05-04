@@ -69,4 +69,10 @@ describe("Gilded Rose", function() {
     expect(items[0].quality).to.equal(0);
   })
 
+  it("decreases the quality of conjured items by 2", () => {
+    const gildedRose = new Shop([ new Item("Fake Apple", 4, 30) ]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).to.equal(28);
+  })
+
 });
