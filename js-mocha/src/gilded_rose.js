@@ -26,6 +26,13 @@ class Shop {
     }
   }
 
+  handleBackstagePass(backstagePass) {
+    if (backstagePass.sellIn > 10) {this.changeQuality(backstagePass, 1)}
+    if (backstagePass.sellIn > 5 && backstagePass.sellIn <= 10) {this.changeQuality(backstagePass, 2)}
+    if (backstagePass.sellIn >= 0 && backstagePass.sellIn <= 5) {this.changeQuality(backstagePass, 3)}
+    if (backstagePass.sellIn < 0) {this.changeQuality(backstagePass, -backstagePass.quality)}
+  }
+
   updateQuality() {
     // quality decreases unless brie, backstage pass or sulfuras
     for (let i = 0; i < this.items.length; i++) {
@@ -35,25 +42,15 @@ class Shop {
         this.changeQuality(this.items[i], decrease)
       }
       if (this.nonDegradingItems.includes(this.items[i].name) && !this.legendaryItems.includes(this.items[i].name)) {  // Quality increases by 1
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') { //backstage pass
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1; // Increases by 2 if 10 days or less
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1; // increases by 3 if 5 days or less
-              }
-            }
+          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
+            this.handleBackstagePass(this.items[i])//backstage pass
+          } else {
+            this.changeQuality(this.items[i], 1)
           }
-        }
       }
       // decrease days to sell unless Sulfuras
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
+      if (!this.legendaryItems.includes(this.items[i].name)) {
+        this.decreaseDaysToSell(this.items[i])
       }
       // Quality decreases twice as fast after sellby
       if (this.items[i].sellIn < 0) {
