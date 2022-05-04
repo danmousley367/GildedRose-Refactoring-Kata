@@ -34,44 +34,29 @@ class Shop {
   }
 
   updateQuality() {
-    // quality decreases unless brie, backstage pass or sulfuras
     for (let i = 0; i < this.items.length; i++) {
       let item = this.items[i]
+
       if (!this.legendaryItems.includes(item.name)) {
         this.decreaseDaysToSell(item)
       }
+
       if (!this.nonDegradingItems.includes(item.name)) {
         let decrease = item.sellIn < 0 ? -2 : -1
         if (this.conjuredItems.includes(item.name)) {decrease *= 2}
         this.changeQuality(item, decrease)
       }
+
       if (this.nonDegradingItems.includes(item.name) && !this.legendaryItems.includes(item.name)) {  // Quality increases by 1
           if (item.name == 'Backstage passes to a TAFKAL80ETC concert') {
             this.handleBackstagePass(item)//backstage pass
-          } else {
+          } else if (item.name === "Aged Brie" && item.sellIn < 0) {
+            this.changeQuality(item, 2)
+          }
+          else {
             this.changeQuality(item, 1)
           }
       }
-      // decrease days to sell unless Sulfuras
-
-      // Quality decreases twice as fast after sellby
-      // if (item.sellIn < 0) {
-      //   if (item.name != 'Aged Brie') {
-      //     if (item.name != 'Backstage passes to a TAFKAL80ETC concert') {
-      //       if (item.quality > 0) {
-      //         if (item.name != 'Sulfuras, Hand of Ragnaros') {
-      //           item.quality = item.quality - 1;
-      //         }
-      //       }
-      //     } else { // Quality reduce to 0 if backstage pass
-      //       item.quality = item.quality - item.quality;
-      //     }
-      //   } else { // Brie increases in quality with age
-      //     if (item.quality < 50) {
-      //       item.quality = item.quality + 1;
-      //     }
-      //   }
-      // }
     }
 
     return this.items;
